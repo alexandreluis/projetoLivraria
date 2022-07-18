@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package Services;
 
 import dao.DAOFactory;
@@ -18,46 +15,45 @@ import model.VendaLivro;
  */
 public class VendaLivroServices 
 {
-    public void addEditora(VendaLivro pVO) throws SQLException
+    public void addVendaLivro(VendaLivro pVO) throws SQLException
     {
         VendaLivroDAO vendaLivro = DAOFactory.getVendaLivroDAO();
         vendaLivro.add(pVO);
     }
     
-    public Editora getById(int idEditora) throws SQLException
+    public VendaLivro getById(int idVendaLivro) throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.getById(idEditora);
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.getById(idVendaLivro);
     }
     
-    public Editora getByDoc(String documentOfEditor) throws SQLException
+    public VendaLivro getByDoc(String numeroDaVenda) throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.getByDoc(documentOfEditor);
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.getByDoc(numeroDaVenda);
     }
     
-    public ArrayList<Editora> getAll() throws SQLException
+    public ArrayList<VendaLivro> getAll() throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.getAll();
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.getAll();
     }
     
-    public boolean updateFieldsOfEditora(Editora pVO) throws SQLException
+    public boolean updateFieldsOfVendaLivro(VendaLivro pVO) throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.updateFields(pVO);
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.updateFields(pVO);
     }
     
-    public boolean deleteOneEditora(int idEditora) throws SQLException
+    public boolean deleteOneEditora(int idVendaLivroDAO) throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.deleteOne(idEditora);
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.deleteOne(idVendaLivroDAO);
     }
     
     public boolean deleteAll() throws SQLException
     {
-        EditoraDAO editoraDAO = DAOFactory.getEditoraDAO();
-        return editoraDAO.deleteAll();
+        VendaLivroDAO vendaLivroDAO = DAOFactory.getVendaLivroDAO();
+        return vendaLivroDAO.deleteAll();
     }
-
 }

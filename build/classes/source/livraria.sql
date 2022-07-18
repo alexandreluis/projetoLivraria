@@ -82,19 +82,6 @@ CREATE TABLE `livro` (
   `isbn` varchar(13) NOT NULL,
   `assunto` varchar(45) NOT NULL,
   `autor` varchar(45) NOT NULL,
-  `estoque` int(11) NOT NULL,
-  `valor` decimal(10,2) NOT NULL,
-  `ideditora` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Extraindo dados da tabela `livro`
---
-
-
---
--- Índices para tabelas despejadas
---
 
 --
 -- Índices para tabela `cliente`
