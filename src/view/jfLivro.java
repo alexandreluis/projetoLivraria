@@ -5,9 +5,15 @@
  */
 package view;
 
+import Services.EditoraServices;
+import Services.LivroServices;
+import Services.ServicesFactory;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.livro;
+import model.Livro;
 import static tlivrariaoojf.TLivrariaOOJF.cadEditoras;
 import static tlivrariaoojf.TLivrariaOOJF.cadLivros;
 
@@ -34,20 +40,31 @@ public class jfLivro extends javax.swing.JFrame {
     }
 
     public void addRowToTable() {
-        DefaultTableModel model = (DefaultTableModel) jtLivros.getModel();
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
-        Object rowData[] = new Object[8];//define vetor das colunas
-        for (livro listLiv : cadLivros.getLivros()) {
-            rowData[0] = listLiv.getIdLivro();
-            rowData[1] = listLiv.getTitulo();
-            rowData[2] = listLiv.getAssunto();
-            rowData[3] = listLiv.getAutor();
-            rowData[4] = listLiv.getIsbn();
-            rowData[5] = listLiv.getEstoque();
-            rowData[6] = listLiv.getPreco();
-            rowData[7] = cadEditoras.getNomeEdt(listLiv.getIdEditora());
-            model.addRow(rowData);
+        try
+        {
+            LivroServices livroServices = ServicesFactory.getLivroServices();
+            EditoraServices editoraServices = ServicesFactory.getEditoraServices();
+            
+            DefaultTableModel model = (DefaultTableModel) jtLivros.getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            Object rowData[] = new Object[8];//define vetor das colunas
+            for (Livro listLiv : livroServices.getAll()) 
+            {
+                rowData[0] = listLiv.getIdLivro();
+                rowData[1] = listLiv.getTitulo();
+                rowData[2] = listLiv.getAssunto();
+                rowData[3] = listLiv.getAutor();
+                rowData[4] = listLiv.getIsbn();
+                rowData[5] = listLiv.getEstoque();
+                rowData[6] = listLiv.getPreco();
+                //rowData[7] = cadEditoras.getNomeEdt(listLiv.getIdEditora());
+                rowData[7] = (editoraServices.getByDoc(listLiv.getIsbn())).getNmEditora();
+                model.addRow(rowData);
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -59,7 +76,8 @@ public class jfLivro extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jcbEditora = new javax.swing.JComboBox<>();
@@ -85,9 +103,19 @@ public class jfLivro extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jcbEditora.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jcbEditoraActionPerformed(evt);
+            }
+        });
+
         jbSalvar.setText("Salvar");
-        jbSalvar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jbSalvar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jbSalvarActionPerformed(evt);
             }
         });
@@ -111,33 +139,42 @@ public class jfLivro extends javax.swing.JFrame {
         jLabel8.setText("Editora");
 
         jtLivros.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
                 "Id", "Titulo", "Assunto", "Autor", "ISBN", "Estoque", "Preço", "Editora"
             }
-        ) {
-            Class[] types = new Class [] {
+        )
+        {
+            Class[] types = new Class []
+            {
                 java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Float.class, java.lang.String.class
             };
 
-            public Class getColumnClass(int columnIndex) {
+            public Class getColumnClass(int columnIndex)
+            {
                 return types [columnIndex];
             }
         });
         jScrollPane1.setViewportView(jtLivros);
 
         jbLimpar.setText("Limpar");
-        jbLimpar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jbLimpar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jbLimparActionPerformed(evt);
             }
         });
 
         jbCancelar.setText("Cancelar");
-        jbCancelar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jbCancelar.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jbCancelarActionPerformed(evt);
             }
         });
@@ -249,28 +286,52 @@ public class jfLivro extends javax.swing.JFrame {
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
         // TODO add your handling code here:
-        livro liv = new livro();
+        LivroServices livroServices = ServicesFactory.getLivroServices();
+        Livro liv = new Livro();
         if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
         } else {
-            liv.setIdLivro(cadLivros.addIdLiv());
-            liv.setTitulo(jtfTitulo.getText());
-            liv.setAssunto(jtfAssunto.getText());
-            liv.setAutor(jtfAutor.getText());
-            liv.setIsbn(jtfISBN.getText());
-            liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
-            liv.setPreco(Float.parseFloat(jtfPreco.getText()));
-            liv.setIdEditora(cadEditoras.getIdEditora(jcbEditora.getSelectedItem().toString()));
-            cadLivros.addLivro(liv);
-            jbLimpar.doClick();
-            this.addRowToTable();
-            JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
+            try
+            {
+                liv.setIdLivro(cadLivros.addIdLiv());
+                liv.setTitulo(jtfTitulo.getText());
+                liv.setAssunto(jtfAssunto.getText());
+                liv.setAutor(jtfAutor.getText());
+                liv.setIsbn(jtfISBN.getText());
+                liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
+                liv.setPreco(Float.parseFloat(jtfPreco.getText()));
+                liv.setIdEditora(cadEditoras.getIdEditora(jcbEditora.getSelectedItem().toString()));
+                //cadLivros.addLivro(liv);
+                livroServices.addLivro(liv);
+                jbLimpar.doClick();
+                this.addRowToTable();
+                JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbLimparActionPerformed
+
+    private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jcbEditoraActionPerformed
+    {//GEN-HEADEREND:event_jcbEditoraActionPerformed
+        try
+        {
+            LivroServices livroServices = ServicesFactory.getLivroServices();
+            
+            for(Livro item: livroServices.getAll())
+            {
+                jcbEditora.addItem("" + item.getIdEditora());
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jcbEditoraActionPerformed
 
     /**
      * @param args the command line arguments

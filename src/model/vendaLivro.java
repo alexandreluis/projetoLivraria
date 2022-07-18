@@ -11,23 +11,35 @@ import java.util.Date;
  *
  * @author jairb
  */
-public class vendaLivro {
+public class VendaLivro {
 
+    private int idVendaLivro;
     private int idCliente;
     private int idLivro;
     private int qtd;
     private float subTotal;
     private Date dataVenda;
 
-    public vendaLivro() {
+    
+    public VendaLivro() {
     }
 
-    public vendaLivro(int idCliente, int idLivro, int qtd, float subTotal, Date dataVenda) {
+    public VendaLivro(int idVendaLivro, int idCliente, int idLivro, int qtd, float subTotal, Date dataVenda) {
+        this.idVendaLivro = idVendaLivro;
         this.idCliente = idCliente;
         this.idLivro = idLivro;
         this.qtd = qtd;
         this.subTotal = subTotal;
         this.dataVenda = dataVenda;
+    }
+
+    
+    public int getIdVendaLivro() {
+        return idVendaLivro;
+    }
+
+    public void setIdVendaLivro(int idVendaLivro) {
+        this.idVendaLivro = idVendaLivro;
     }
 
     public int getIdCliente() {
@@ -68,10 +80,5 @@ public class vendaLivro {
 
     public void setDataVenda(Date dataVenda) {
         this.dataVenda = dataVenda;
-    }
-
-    @Override
-    public String toString() {
-        return "vendaLivro{" + "idCliente=" + idCliente + ", idLivro=" + idLivro + ", qtd=" + qtd + ", subTotal=" + subTotal + ", dataVenda=" + dataVenda + '}';
     }
 }

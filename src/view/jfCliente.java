@@ -5,21 +5,28 @@
  */
 package view;
 
+import Services.ClienteServices;
+import Services.ServicesFactory;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.cliente;
+import model.Cliente;
 import static tlivrariaoojf.TLivrariaOOJF.cadClientes;
 
 /**
  *
  * @author jairb
  */
-public class jfCliente extends javax.swing.JFrame {
+public class jfCliente extends javax.swing.JFrame
+{
 
     /**
      * Creates new form jfCliente
      */
-    public jfCliente() {
+    public jfCliente()
+    {
         initComponents();
         addRowToTable();
     }
@@ -214,98 +221,161 @@ public class jfCliente extends javax.swing.JFrame {
         jfCliente.this.dispose();
     }//GEN-LAST:event_jbCancelarActionPerformed
 
-    public void addRowToTable(){
-        DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
-        Object rowData[] = new Object[6];//define vetor das colunas
-        for (cliente listCli: cadClientes.getClientes()){
-            rowData[0] = listCli.getIdCliente();
-            rowData[1] = listCli.getNomeCliente();
-            rowData[2] = listCli.getCpf();
-            rowData[3] = listCli.getCnpj();
-            rowData[4] = listCli.getTelefone();
-            rowData[5] = listCli.getEndereco();
-            model.addRow(rowData);
-        }
-        
-    }
-    
-    private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:
-        cliente cli = new cliente();
-        cli.setNomeCliente(jtfNomeCliente.getText());
-        cli.setTelefone(jtfTelefone.getText());
-        cli.setEndereco(jtfEndereco.getText());
-        boolean doc = false;
+    public void addRowToTable()
+    {
+        try
+        {
+            ClienteServices clienteServices = ServicesFactory.getClienteServices();
 
-        int tPessoa = 0;
-        if (jrbCpf.isSelected() && !jrbCnpj.isSelected()) {
-            tPessoa = 1;
-        } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected()) {
-            tPessoa = 2;
-        }else{
-            JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
+            DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            Object rowData[] = new Object[6];//define vetor das colunas
+
+            for (Cliente listCli : clienteServices.getAll())
+            {
+                rowData[0] = listCli.getIdCliente();
+                rowData[1] = listCli.getNomeCliente();
+                rowData[2] = listCli.getCpf();
+                rowData[3] = listCli.getCnpj();
+                rowData[4] = listCli.getTelefone();
+                rowData[5] = listCli.getEndereco();
+                model.addRow(rowData);
+            }
+
+        } catch (SQLException ex)
+        {
+            JOptionPane.showInputDialog("Clientes não existem.");
         }
-        cliente cliCpfCnpj;
-        cliCpfCnpj = cadClientes.pesqCli(tPessoa, jtfCpfCnpj.getText());
-        if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null) {
-            cli.setCpf(jtfCpfCnpj.getText());
-            cli.setCnpj(null);
-            doc = false;
-        } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null) {
-            cli.setCpf(null);
-            cli.setCnpj(jtfCpfCnpj.getText());
-            doc = false;
+
+    }
+
+    private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+        try
+        {
+            ClienteServices clienteServices = ServicesFactory.getClienteServices();
+
+            Cliente cli = new Cliente();
+            boolean podeCadastrar = false;
+
+            if (!jtfNomeCliente.getText().isEmpty())
+            {
+                cli.setNomeCliente(jtfNomeCliente.getText());
+                podeCadastrar = true;
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Preencha o campo Nome do cliente.");
+            }
+
+            if (!jtfTelefone.getText().isEmpty())
+            {
+                cli.setTelefone(jtfTelefone.getText());
+                podeCadastrar = true;
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Preencha o campo telefone.");
+            }
+
+            if (!jtfEndereco.getText().isEmpty())
+            {
+                cli.setEndereco(jtfEndereco.getText());
+                podeCadastrar = true;
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Preencha o campo endereço.");
+            }
+
+            
+            if (!bgCpfCnpj.getSelection().isSelected())
+            {
+                JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
+            } else
+            {
+                podeCadastrar = true;
+            }
+            System.out.println("antes ");
+            Cliente cliCpfCnpj = null;
+            if (!jtfCpfCnpj.getText().isEmpty())
+            {
+                cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
+                
+                if (!cliCpfCnpj.getNomeCliente().isEmpty())
+                {
+                    JOptionPane.showMessageDialog(this, "Este documento já existe!" + "\nTente novamente!!!");
+                } else
+                {
+                    if (bgCpfCnpj.getSelection().toString().equals("CPF"))
+                    {
+                        System.out.println("11111111");
+                        cli.setCpf(jtfCpfCnpj.getText());
+                        cli.setCnpj("0");
+                    } else
+                    {
+
+                        cli.setCnpj(jtfCpfCnpj.getText());
+                        cli.setCpf("0");
+                    }
+                }
+            }
+            System.out.println("depois ");
+            //Cadastro a partir das validações
+            if (podeCadastrar)
+            {
+                System.out.println("inserir");
+                clienteServices.addCliente(cli);
+                addRowToTable();
+                jbLimpar.doClick();
+                JOptionPane.showMessageDialog(this, cli.getNomeCliente() + " cadastrado com sucesso!");
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (cadClientes.verificaCliente(cliCpfCnpj.getIdCliente())) {
-            JOptionPane.showMessageDialog(this, "Este documento já existe!"
-                    + "\nTente novamente!!!");
-            doc = true;
-        }
-        //Cadastro a partir das validações
-        if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty()) {
-            cli.setIdCliente(cadClientes.addIdCli());
-            cadClientes.addCliente(cli);
-            addRowToTable();
-            jbLimpar.doClick();
-            JOptionPane.showMessageDialog(this, cli.getNomeCliente() + " cadastrado com sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
-        }
-        
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(jfCliente.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new jfCliente().setVisible(true);
             }
         });

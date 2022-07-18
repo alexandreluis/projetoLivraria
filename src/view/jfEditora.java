@@ -5,8 +5,13 @@
  */
 package view;
 
+import Services.EditoraServices;
+import Services.ServicesFactory;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import model.editora;
+import model.Editora;
 import static tlivrariaoojf.TLivrariaOOJF.cadEditoras;
 
 /**
@@ -24,17 +29,26 @@ public class jfEditora extends javax.swing.JFrame {
     }
 
     public void addRowToTable() {
-        DefaultTableModel model = (DefaultTableModel) jtEditora.getModel();
-        model.getDataVector().removeAllElements();
-        model.fireTableDataChanged();
-        Object rowData[] = new Object[5];//define vetor das colunas
-        for (editora listEdt : cadEditoras.getEditora()) {
-            rowData[0] = listEdt.getIdEditora();
-            rowData[1] = listEdt.getNmEditora();
-            rowData[2] = listEdt.getEndereco();
-            rowData[3] = listEdt.getTelefone();
-            rowData[4] = listEdt.getGerente();
-            model.addRow(rowData);
+        try
+        {
+            EditoraServices editoraServices = ServicesFactory.getEditoraServices();
+            
+            DefaultTableModel model = (DefaultTableModel) jtEditora.getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            Object rowData[] = new Object[5];//define vetor das colunas
+            
+            for (Editora listEdt : editoraServices.getAll()) {
+                rowData[0] = listEdt.getIdEditora();
+                rowData[1] = listEdt.getNmEditora();
+                rowData[2] = listEdt.getEndereco();
+                rowData[3] = listEdt.getTelefone();
+                rowData[4] = listEdt.getGerente();
+                model.addRow(rowData);
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfEditora.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
@@ -191,18 +205,26 @@ public class jfEditora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:
-        editora edt = new editora();
-        edt.setNmEditora(jtfNomeEditora.getText());
-        edt.setEndereco(jtfEndereco.getText());
-        edt.setGerente(jtfGerente.getText());
-        edt.setTelefone(jtfTelefone.getText());
-        edt.setIdEditora(cadEditoras.addIdEdt());
-
-        cadEditoras.addEditora(edt);
-        addRowToTable();
-        jbLimpar.doClick();
-        jtfNomeEditora.requestFocus();
+        try
+        {
+            // TODO add your handling code here:
+            Editora edt = new Editora();
+            edt.setNmEditora(jtfNomeEditora.getText());
+            edt.setEndereco(jtfEndereco.getText());
+            edt.setGerente(jtfGerente.getText());
+            edt.setTelefone(jtfTelefone.getText());
+            edt.setIdEditora(cadEditoras.addIdEdt());
+            
+            EditoraServices editoraServices = ServicesFactory.getEditoraServices();
+            editoraServices.addEditora(edt);
+            //cadEditoras.addEditora(edt);
+            addRowToTable();
+            jbLimpar.doClick();
+            jtfNomeEditora.requestFocus();
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfEditora.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCancelarActionPerformed

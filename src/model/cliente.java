@@ -9,15 +9,15 @@ package model;
  *
  * @author jairb
  */
-public class cliente {
+public class Cliente {
     private int idCliente;
     private String nomeCliente;
-    private String cpf;
-    private String cnpj;
     private String endereco;
     private String telefone;
+    private String cpf;
+    private String cnpj;
 
-    public cliente() {
+    public Cliente() {
         //Construtor Vazio para acessar os metodos acessores get e set
     }
     
@@ -30,7 +30,7 @@ public class cliente {
      * @param endereco
      * @param telefone 
      */
-    public cliente(int idCliente, String nomeCliente, String cpf, String cnpj, String endereco, String telefone) {
+    public Cliente(int idCliente, String nomeCliente, String cpf, String cnpj, String endereco, String telefone) {
         this.idCliente = idCliente;
         this.nomeCliente = nomeCliente;
         this.cpf = cpf;
