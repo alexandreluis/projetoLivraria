@@ -12,8 +12,8 @@ import model.VendaLivro;
  *
  * @author 180900411
  */
-public class VendaLivroDAO implements InterfaceDAO<VendaLivro> {
-
+public class VendaLivroDAO implements InterfaceDAO<VendaLivro> 
+{
     @Override
     public void add(VendaLivro pVO) throws SQLException {
         Connection connection = Conexao.getConexao();
@@ -24,10 +24,9 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro> {
             sql = "INSERT INTO vendaLivro VALUES (null, "
                     + pVO.getIdCliente() + ", "
                     + pVO.getIdLivro() + ", "
-                    + pVO.getQtd() + ", "
-                    + pVO.getSubTotal() + ", "
-                    + pVO.getDataVenda() + ");";
-
+                    + pVO.getDataVenda() + ", "
+                    + pVO.getQtd() + ");";
+            System.out.println(":1 " + sql);
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir a venda do livro no sistema.\n" + e.getMessage());

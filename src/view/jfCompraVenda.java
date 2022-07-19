@@ -8,7 +8,15 @@ import Services.ClienteServices;
 import Services.LivroServices;
 import Services.ServicesFactory;
 import Services.VendaLivroServices;
+import java.security.Timestamp;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,14 +28,12 @@ import model.VendaLivro;
  *
  * @author alexandreluis
  */
-public class jfCompraVenda extends javax.swing.JFrame
-{
+public class jfCompraVenda extends javax.swing.JFrame {
 
     /**
      * Creates new form jfCompraVenda
      */
-    public jfCompraVenda()
-    {
+    public jfCompraVenda() {
         initComponents();
     }
 
@@ -38,8 +44,7 @@ public class jfCompraVenda extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -49,7 +54,7 @@ public class jfCompraVenda extends javax.swing.JFrame
         jLabel3 = new javax.swing.JLabel();
         jtfSubTotal = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        jtfQuantidade = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -62,10 +67,8 @@ public class jfCompraVenda extends javax.swing.JFrame
 
         jLabel1.setText("CPF/CNPJ");
 
-        jtfDocCliente.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jtfDocCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jtfDocClienteActionPerformed(evt);
             }
         });
@@ -83,10 +86,8 @@ public class jfCompraVenda extends javax.swing.JFrame
         jLabel8.setText(" ");
 
         jButton1.setText("Comprar");
-        jButton1.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -133,7 +134,7 @@ public class jfCompraVenda extends javax.swing.JFrame
                                     .addComponent(jLabel6))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jtfSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 158, Short.MAX_VALUE)
                         .addComponent(jLabel5)
@@ -161,7 +162,7 @@ public class jfCompraVenda extends javax.swing.JFrame
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
                     .addComponent(jLabel10))
                 .addGap(27, 27, 27)
@@ -179,7 +180,7 @@ public class jfCompraVenda extends javax.swing.JFrame
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 81, Short.MAX_VALUE))
+                .addGap(0, 23, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,24 +200,57 @@ public class jfCompraVenda extends javax.swing.JFrame
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        try
-        {
+//        LocalDateTime datetime1 = LocalDateTime.now();
+//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+//        String formatDateTime = datetime1.format(format);
+
+        /*
+instant = Timestamp.valueOf(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).toInstant();
+date = Date.from(instant);
+System.out.println(date); 
+        LocalDateTime datetime1 = LocalDateTime.now();
+        
+LocalDateTime localDateTime = LocalDateTime.parse(datetime1);
+Instant instant = LocalDateTime.atZone(ZoneId.systemDefault()).toInstant();
+Date date = Date.from(instant);
+System.out.println(date); 
+Timestamp timestamp = Timestamp.valueOf(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+date = new Date(timestamp.getTime());
+System.out.println(date); */
+Date in = new Date();
+LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+
+        if (jtfDocCliente.getText().equals("")) {
+            JOptionPane.showInputDialog(null, "Preencha o CPF/CNPJ");
+        }
+
+        if (jtfDocLivro.getText().equals("")) {
+            JOptionPane.showInputDialog(null, "Preencha o ISBN.");
+        }
+
+        if (jtfQuantidade.getText().equals("")) {
+            JOptionPane.showInputDialog(null, "Preencha a quantidade.");
+        }
+
+        try {
             ClienteServices clienteServices = ServicesFactory.getClienteServices();
             Cliente cliente = clienteServices.getByDoc(jtfDocLivro.getText());
-            
+
             LivroServices livroServices = ServicesFactory.getLivroServices();
             Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
-            
+
             String jtfSubTotalDaCompra = jtfSubTotal.getText();
-            
+
             VendaLivro vendaLivro = new VendaLivro();
-            
-            //vendaLivro.
-            
+            vendaLivro.setIdCliente(cliente.getIdCliente());
+            vendaLivro.setIdLivro(livro.getIdLivro());
+            vendaLivro.setDataVenda(outDate);
+            vendaLivro.setQtd(Integer.parseInt(jtfQuantidade.getText()));
+
             VendaLivroServices vendaLivroServices = ServicesFactory.getVendaLivroServices();
             vendaLivroServices.addVendaLivro(vendaLivro);
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -224,43 +258,33 @@ public class jfCompraVenda extends javax.swing.JFrame
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[])
-    {
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex)
-        {
+        } catch (ClassNotFoundException ex) {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex)
-        {
+        } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex)
-        {
+        } catch (IllegalAccessException ex) {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
                 new jfCompraVenda().setVisible(true);
             }
         });
@@ -279,9 +303,9 @@ public class jfCompraVenda extends javax.swing.JFrame
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jtfDocCliente;
     private javax.swing.JTextField jtfDocLivro;
+    private javax.swing.JTextField jtfQuantidade;
     private javax.swing.JTextField jtfSubTotal;
     // End of variables declaration//GEN-END:variables
 }

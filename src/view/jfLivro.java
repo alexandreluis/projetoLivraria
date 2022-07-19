@@ -66,7 +66,6 @@ public class jfLivro extends javax.swing.JFrame {
         {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
     /**
