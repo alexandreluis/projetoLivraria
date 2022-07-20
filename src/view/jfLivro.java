@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import model.Editora;
 import model.Livro;
 import static tlivrariaoojf.TLivrariaOOJF.cadEditoras;
 import static tlivrariaoojf.TLivrariaOOJF.cadLivros;
@@ -320,11 +321,12 @@ public class jfLivro extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_jcbEditoraActionPerformed
         try
         {
-            LivroServices livroServices = ServicesFactory.getLivroServices();
+            EditoraServices editoraServices = ServicesFactory.getEditoraServices();
+            //LivroServices livroServices = ServicesFactory.getLivroServices();
             
-            for(Livro item: livroServices.getAll())
+            for(Editora item: editoraServices.getAll())
             {
-                jcbEditora.addItem("" + item.getIdEditora());
+                jcbEditora.addItem("" + item.getIdEditora() + ": " + item.getNmEditora());
             }
         } catch (SQLException ex)
         {

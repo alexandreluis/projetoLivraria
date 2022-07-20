@@ -23,13 +23,13 @@ public class LivroDAO implements InterfaceDAO<Livro> {
             String sql;
             sql = "INSERT INTO livro VALUES (null, '"
                     + pVO.getTitulo() + "', '"
-                    + pVO.getAutor() + "', '"
-                    + pVO.getAssunto() + "', '"
                     + pVO.getIsbn() + "', "
+                    + pVO.getAssunto() + "', '"
+                    + pVO.getAutor() + "', '"
                     + pVO.getEstoque() + ", "
                     + pVO.getPreco() + ", "
-                    + pVO.getIdLivro() + ");";
-
+                    + pVO.getIdEditora() + ");";
+            System.out.println(sql);
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir o livro.\n" + e.getMessage());
