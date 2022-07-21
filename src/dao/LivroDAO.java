@@ -26,10 +26,10 @@ public class LivroDAO implements InterfaceDAO<Livro> {
                     + pVO.getIsbn() + "', "
                     + pVO.getAssunto() + "', '"
                     + pVO.getAutor() + "', '"
-                    + pVO.getEstoque() + ", "
-                    + pVO.getPreco() + ", "
-                    + pVO.getIdEditora() + ");";
-            System.out.println(sql);
+                    + pVO.getEstoque() + "', '"
+                    + pVO.getIdEditora() + "', '"
+                    + pVO.getPreco() + "');";
+
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir o livro.\n" + e.getMessage());

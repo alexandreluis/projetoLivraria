@@ -238,11 +238,10 @@ public class jfCliente extends javax.swing.JFrame
                 rowData[1] = listCli.getNomeCliente();
                 rowData[2] = listCli.getCpf();
                 rowData[3] = listCli.getCnpj();
-                rowData[4] = listCli.getTelefone();
-                rowData[5] = listCli.getEndereco();
+                rowData[4] = listCli.getEndereco();
+                rowData[5] = listCli.getTelefone();
                 model.addRow(rowData);
             }
-
         } catch (SQLException ex)
         {
             JOptionPane.showInputDialog("Clientes não existem.");
@@ -251,77 +250,61 @@ public class jfCliente extends javax.swing.JFrame
     }
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
+
         try
         {
             ClienteServices clienteServices = ServicesFactory.getClienteServices();
-
-            Cliente cli = new Cliente();
-            boolean podeCadastrar = false;
-
-            if (!jtfNomeCliente.getText().isEmpty())
-            {
-                cli.setNomeCliente(jtfNomeCliente.getText());
-                podeCadastrar = true;
-            } else
-            {
-                JOptionPane.showMessageDialog(this, "Preencha o campo Nome do cliente.");
-            }
-
-            if (!jtfTelefone.getText().isEmpty())
-            {
-                cli.setTelefone(jtfTelefone.getText());
-                podeCadastrar = true;
-            } else
-            {
-                JOptionPane.showMessageDialog(this, "Preencha o campo telefone.");
-            }
-
-            if (!jtfEndereco.getText().isEmpty())
-            {
-                cli.setEndereco(jtfEndereco.getText());
-                podeCadastrar = true;
-            } else
-            {
-                JOptionPane.showMessageDialog(this, "Preencha o campo endereço.");
-            }
-
             
-            if (!bgCpfCnpj.getSelection().isSelected())
+            Cliente cli = new Cliente();
+            cli.setNomeCliente(jtfNomeCliente.getText());
+            cli.setTelefone(jtfTelefone.getText());
+            cli.setEndereco(jtfEndereco.getText());
+            boolean doc = false;
+            int tPessoa = 0;
+            
+            
+            if (jrbCpf.isSelected() && !jrbCnpj.isSelected())
+            {
+                tPessoa = 1;
+            } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected())
+            {
+                tPessoa = 2;
+            } else
             {
                 JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
-            } else
-            {
-                podeCadastrar = true;
             }
-            System.out.println("antes ");
-            Cliente cliCpfCnpj = null;
-            if (!jtfCpfCnpj.getText().isEmpty())
+            
+            Cliente cliCpfCnpj;
+            cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
+            
+            System.out.println(">> " + (cliCpfCnpj == null));
+            
+            if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null)
             {
-                cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
-                
-                if (!cliCpfCnpj.getNomeCliente().isEmpty())
-                {
-                    JOptionPane.showMessageDialog(this, "Este documento já existe!" + "\nTente novamente!!!");
-                } else
-                {
-                    if (bgCpfCnpj.getSelection().toString().equals("CPF"))
-                    {
-                        System.out.println("11111111");
-                        cli.setCpf(jtfCpfCnpj.getText());
-                        cli.setCnpj("0");
-                    } else
-                    {
-
-                        cli.setCnpj(jtfCpfCnpj.getText());
-                        cli.setCpf("0");
-                    }
-                }
+                cli.setCpf(jtfCpfCnpj.getText());
+                cli.setCnpj(null);
+                doc = false;
+            } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null)
+            {
+                cli.setCpf(null);
+                cli.setCnpj(jtfCpfCnpj.getText());
+                doc = false;
             }
-            System.out.println("depois ");
+            
+            //Integer nCPFCNJ = cliCpfCnpj.getIdCliente();
+             
+            if ((cliCpfCnpj == null) == true)
+            {
+                JOptionPane.showMessageDialog(this, "Este documento já existe!"
+                        + "\nTente novamente!!!");
+                doc = true;
+            }
+            
             //Cadastro a partir das validações
-            if (podeCadastrar)
+            if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty())
             {
-                System.out.println("inserir");
+                System.out.println("cadastro" + cli.getNomeCliente());
+                //cli.setIdCliente(clienteServices.addCliente(cli));
                 clienteServices.addCliente(cli);
                 addRowToTable();
                 jbLimpar.doClick();

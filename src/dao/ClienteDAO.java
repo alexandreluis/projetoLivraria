@@ -18,17 +18,17 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
     public void add(Cliente pVO) throws SQLException {
         Connection conn = Conexao.getConexao();
         Statement statement = conn.createStatement();
-
+        System.out.println(":: " + pVO.getNomeCliente());
         try {
             String sql;
 
             sql = "INSERT INTO cliente VALUES (null, '"
                     + pVO.getNomeCliente() + "', '"
-                    + pVO.getEndereco() + "', '"
-                    + pVO.getTelefone() + "', '"
                     + pVO.getCpf() + "', '"
-                    + pVO.getCnpj() + "');";
-            
+                    + pVO.getCnpj() + "', '"
+                    + pVO.getEndereco() + "', '"
+                    + pVO.getTelefone() + "');";
+            System.out.println("1:ClienteDAO " + sql);
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir cliente.\n" + e.getMessage());
@@ -54,10 +54,10 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
             if (rs.next()) {
                 c.setIdCliente(rs.getInt("idCliente"));
                 c.setNomeCliente(rs.getString("nomeCliente"));
-                c.setCpf(rs.getString("cpfCliente"));
-                c.setCnpj(rs.getString("cnpjCliente"));
-                c.setEndereco(rs.getString("enderecoCliente"));
-                c.setTelefone(rs.getString("telefoneCliente"));
+                c.setCpf(rs.getString("cpf"));
+                c.setCnpj(rs.getString("cnpj"));
+                c.setEndereco(rs.getString("endereco"));
+                c.setTelefone(rs.getString("telefone"));
             }
         } catch (SQLException e) {
             throw new SQLException("Cliente não existe.\n" + e.getMessage());
@@ -79,17 +79,17 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
 
         try {
             String sql;
-            sql = "SELECT * FROM cliente";
+            sql = "SELECT * FROM cliente WHERE idCliente = " + doc + ";";
 
             ResultSet rs = statement.executeQuery(sql);
 
             while (rs.next()) 
             {
                 c.setIdCliente(rs.getInt("idCliente"));
-                c.setNomeCliente(rs.getString("nome"));
+                c.setNomeCliente(rs.getString("nomeCliente"));
                 c.setCpf(rs.getString("cpf"));
                 c.setCnpj(rs.getString("cnpj"));
-                c.setEndereco(rs.getString("enderecoCompleto"));
+                c.setEndereco(rs.getString("endereco"));
                 c.setTelefone(rs.getString("telefone"));
             }
         } catch (SQLException e) {
@@ -119,10 +119,10 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
                 Cliente c = new Cliente();
 
                 c.setIdCliente(rs.getInt("idCliente"));
-                c.setNomeCliente(rs.getString("nome"));
+                c.setNomeCliente(rs.getString("nomeCliente"));
                 c.setCpf(rs.getString("cpf"));
                 c.setCnpj(rs.getString("cnpj"));
-                c.setEndereco(rs.getString("enderecoCompleto"));
+                c.setEndereco(rs.getString("endereco"));
                 c.setTelefone(rs.getString("telefone"));
 
                 listaDeClientes.add(c);

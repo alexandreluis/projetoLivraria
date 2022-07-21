@@ -28,12 +28,14 @@ import model.VendaLivro;
  *
  * @author alexandreluis
  */
-public class jfCompraVenda extends javax.swing.JFrame {
+public class jfCompraVenda extends javax.swing.JFrame
+{
 
     /**
      * Creates new form jfCompraVenda
      */
-    public jfCompraVenda() {
+    public jfCompraVenda()
+    {
         initComponents();
     }
 
@@ -200,40 +202,28 @@ public class jfCompraVenda extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-//        LocalDateTime datetime1 = LocalDateTime.now();
-//        DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-//        String formatDateTime = datetime1.format(format);
 
-        /*
-instant = Timestamp.valueOf(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))).toInstant();
-date = Date.from(instant);
-System.out.println(date); 
-        LocalDateTime datetime1 = LocalDateTime.now();
-        
-LocalDateTime localDateTime = LocalDateTime.parse(datetime1);
-Instant instant = LocalDateTime.atZone(ZoneId.systemDefault()).toInstant();
-Date date = Date.from(instant);
-System.out.println(date); 
-Timestamp timestamp = Timestamp.valueOf(localDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-date = new Date(timestamp.getTime());
-System.out.println(date); */
-Date in = new Date();
-LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
+        Date in = new Date();
+        LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
+        Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
-        if (jtfDocCliente.getText().equals("")) {
+        if (jtfDocCliente.getText().equals(""))
+        {
             JOptionPane.showInputDialog(null, "Preencha o CPF/CNPJ");
         }
 
-        if (jtfDocLivro.getText().equals("")) {
+        if (jtfDocLivro.getText().equals(""))
+        {
             JOptionPane.showInputDialog(null, "Preencha o ISBN.");
         }
 
-        if (jtfQuantidade.getText().equals("")) {
+        if (jtfQuantidade.getText().equals(""))
+        {
             JOptionPane.showInputDialog(null, "Preencha a quantidade.");
         }
 
-        try {
+        try
+        {
             ClienteServices clienteServices = ServicesFactory.getClienteServices();
             Cliente cliente = clienteServices.getByDoc(jtfDocLivro.getText());
 
@@ -250,7 +240,8 @@ Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
             VendaLivroServices vendaLivroServices = ServicesFactory.getVendaLivroServices();
             vendaLivroServices.addVendaLivro(vendaLivro);
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             JOptionPane.showMessageDialog(null, "Erro");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -258,33 +249,43 @@ Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(jfCompraVenda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new jfCompraVenda().setVisible(true);
             }
         });
