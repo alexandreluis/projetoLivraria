@@ -23,13 +23,14 @@ public class LivroDAO implements InterfaceDAO<Livro> {
             String sql;
             sql = "INSERT INTO livro VALUES (null, '"
                     + pVO.getTitulo() + "', '"
-                    + pVO.getIsbn() + "', "
-                    + pVO.getAssunto() + "', '"
                     + pVO.getAutor() + "', '"
-                    + pVO.getEstoque() + "', '"
-                    + pVO.getIdEditora() + "', '"
-                    + pVO.getPreco() + "');";
-
+                    + pVO.getAssunto() + "', '"
+                    + pVO.getIsbn() + "', "
+                    + pVO.getEstoque() + ", "
+                    + pVO.getPreco() + ", "
+                    + pVO.getIdEditora() + ");";
+            System.out.println("::::"  + pVO.getIdEditora());
+            System.out.println(" sql " + sql);
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir o livro.\n" + e.getMessage());
@@ -118,17 +119,18 @@ public class LivroDAO implements InterfaceDAO<Livro> {
 
             ArrayList<Livro> listaDeLivro = new ArrayList<>();
 
-            while (rs.next()) {
+            while (rs.next()) 
+            {
                 Livro livro = new Livro();
 
                 livro.setIdLivro(rs.getInt("idLivro"));
-                livro.setTitulo(rs.getString("tituloLivro"));
-                livro.setAutor(rs.getString("autorLivro"));
-                livro.setAssunto(rs.getString("assuntoLivro"));
-                livro.setIsbn(rs.getString("isbnLivro"));
-                livro.setEstoque(rs.getInt("estoqueLivro"));
-                livro.setPreco(rs.getFloat("precoLivro"));
-                livro.setIdLivro(rs.getInt("idLivro"));
+                livro.setTitulo(rs.getString("titulo"));
+                livro.setAutor(rs.getString("autor"));
+                livro.setAssunto(rs.getString("assunto"));
+                livro.setIsbn(rs.getString("isbn"));
+                livro.setEstoque(rs.getInt("estoque"));
+                livro.setPreco(rs.getFloat("preco"));
+                livro.setIdEditora(rs.getInt("idEditora"));
 
                 listaDeLivro.add(livro);
             }

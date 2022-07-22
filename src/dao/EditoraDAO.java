@@ -51,10 +51,10 @@ public class EditoraDAO implements InterfaceDAO<Editora> {
 
             if (rs.next()) {
                 editora.setIdEditora(rs.getInt("idEditora"));
-                editora.setNmEditora(rs.getString("nomeEditora"));
-                editora.setEndereco(rs.getString("enderecoEditora"));
-                editora.setTelefone(rs.getString("telefoneEditora"));
-                editora.setGerente(rs.getString("gerenteEditora"));
+                editora.setNmEditora(rs.getString("nmEditora"));
+                editora.setEndereco(rs.getString("endereco"));
+                editora.setTelefone(rs.getString("telefone"));
+                editora.setGerente(rs.getString("gerente"));
             }
         } catch (SQLException e) {
             throw new SQLException("Editora não existe.\n" + e.getMessage());
@@ -97,7 +97,8 @@ public class EditoraDAO implements InterfaceDAO<Editora> {
     }
 
     @Override
-    public ArrayList<Editora> getAll() throws SQLException {
+    public ArrayList<Editora> getAll() throws SQLException 
+    {
         Connection connection = Conexao.getConexao();
         Statement statement = connection.createStatement();
         
@@ -112,8 +113,8 @@ public class EditoraDAO implements InterfaceDAO<Editora> {
             while (rs.next()) {
                 Editora editora = new Editora();
 
-                editora.setIdEditora(rs.getInt("ideditora"));
-                editora.setNmEditora(rs.getString("nomeEditora"));
+                editora.setIdEditora(rs.getInt("idEditora"));
+                editora.setNmEditora(rs.getString("nmEditora"));
                 editora.setEndereco(rs.getString("endereco"));
                 editora.setTelefone(rs.getString("telefone"));
                 editora.setGerente(rs.getString("gerente"));

@@ -276,23 +276,20 @@ public class jfCliente extends javax.swing.JFrame
             
             Cliente cliCpfCnpj;
             cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
-            
-            System.out.println(">> " + (cliCpfCnpj == null));
-            
-            if (jrbCpf.isSelected() && cliCpfCnpj.getCpf() == null)
+                       
+            if ((jrbCpf.isSelected()) && (cliCpfCnpj.getCpf() == null))
             {
                 cli.setCpf(jtfCpfCnpj.getText());
                 cli.setCnpj(null);
                 doc = false;
-            } else if (jrbCnpj.isSelected() && cliCpfCnpj.getCnpj() == null)
+            } else if ((jrbCnpj.isSelected()) && (cliCpfCnpj.getCnpj() == null))
             {
                 cli.setCpf(null);
                 cli.setCnpj(jtfCpfCnpj.getText());
                 doc = false;
             }
             
-            //Integer nCPFCNJ = cliCpfCnpj.getIdCliente();
-             
+            //Integer nCPFCNJ = cliCpfCnpj.getIdCliente(); 
             if ((cliCpfCnpj == null) == true)
             {
                 JOptionPane.showMessageDialog(this, "Este documento já existe!"
@@ -303,8 +300,6 @@ public class jfCliente extends javax.swing.JFrame
             //Cadastro a partir das validações
             if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty())
             {
-                System.out.println("cadastro" + cli.getNomeCliente());
-                //cli.setIdCliente(clienteServices.addCliente(cli));
                 clienteServices.addCliente(cli);
                 addRowToTable();
                 jbLimpar.doClick();

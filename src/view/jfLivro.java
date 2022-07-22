@@ -30,7 +30,8 @@ public class jfLivro extends javax.swing.JFrame {
     public jfLivro() {
         initComponents();
         addRowToTable();
-        this.addEditoraJCB();
+        //this.addEditoraJCB();
+        preencheComEditoras();
     }
 
     public void addEditoraJCB() {
@@ -41,17 +42,15 @@ public class jfLivro extends javax.swing.JFrame {
     }
 
     public void addRowToTable() {
-        try
-        {
+        try {
             LivroServices livroServices = ServicesFactory.getLivroServices();
             EditoraServices editoraServices = ServicesFactory.getEditoraServices();
-            
+
             DefaultTableModel model = (DefaultTableModel) jtLivros.getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
-            Object rowData[] = new Object[8];//define vetor das colunas
-            for (Livro listLiv : livroServices.getAll()) 
-            {
+            Object rowData[] = new Object[8];
+            for (Livro listLiv : livroServices.getAll()) {
                 rowData[0] = listLiv.getIdLivro();
                 rowData[1] = listLiv.getTitulo();
                 rowData[2] = listLiv.getAssunto();
@@ -60,11 +59,10 @@ public class jfLivro extends javax.swing.JFrame {
                 rowData[5] = listLiv.getEstoque();
                 rowData[6] = listLiv.getPreco();
                 //rowData[7] = cadEditoras.getNomeEdt(listLiv.getIdEditora());
-                rowData[7] = (editoraServices.getByDoc(listLiv.getIsbn())).getNmEditora();
+                rowData[7] = listLiv.getIdEditora(); //(editoraServices.getById(listLiv.getIdEditora())).getIdEditora();
                 model.addRow(rowData);
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -288,26 +286,28 @@ public class jfLivro extends javax.swing.JFrame {
         // TODO add your handling code here:
         LivroServices livroServices = ServicesFactory.getLivroServices();
         Livro liv = new Livro();
+        
         if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
         } else {
-            try
+            try 
             {
-                liv.setIdLivro(cadLivros.addIdLiv());
                 liv.setTitulo(jtfTitulo.getText());
                 liv.setAssunto(jtfAssunto.getText());
                 liv.setAutor(jtfAutor.getText());
                 liv.setIsbn(jtfISBN.getText());
                 liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
                 liv.setPreco(Float.parseFloat(jtfPreco.getText()));
-                liv.setIdEditora(cadEditoras.getIdEditora(jcbEditora.getSelectedItem().toString()));
-                //cadLivros.addLivro(liv);
+                
+                String[] parteId = jcbEditora.getSelectedItem().toString().split(":");
+                int idDaEditora = Integer.parseInt(parteId[0]);
+                
+                liv.setIdEditora(idDaEditora);
                 livroServices.addLivro(liv);
                 jbLimpar.doClick();
                 this.addRowToTable();
                 JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
-            } catch (SQLException ex)
-            {
+            } catch (SQLException ex) {
                 Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -317,21 +317,21 @@ public class jfLivro extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jbLimparActionPerformed
 
-    private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jcbEditoraActionPerformed
-    {//GEN-HEADEREND:event_jcbEditoraActionPerformed
-        try
-        {
+    private void preencheComEditoras() {
+        try {
             EditoraServices editoraServices = ServicesFactory.getEditoraServices();
-            //LivroServices livroServices = ServicesFactory.getLivroServices();
-            
-            for(Editora item: editoraServices.getAll())
-            {
+
+            for (Editora item : editoraServices.getAll()) {
                 jcbEditora.addItem("" + item.getIdEditora() + ": " + item.getNmEditora());
             }
-        } catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jcbEditoraActionPerformed
+    {//GEN-HEADEREND:event_jcbEditoraActionPerformed
+        
     }//GEN-LAST:event_jcbEditoraActionPerformed
 
     /**

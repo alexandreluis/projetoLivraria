@@ -38,7 +38,8 @@ public class jfEditora extends javax.swing.JFrame {
             model.fireTableDataChanged();
             Object rowData[] = new Object[5];//define vetor das colunas
             
-            for (Editora listEdt : editoraServices.getAll()) {
+            for (Editora listEdt : editoraServices.getAll()) 
+            {
                 rowData[0] = listEdt.getIdEditora();
                 rowData[1] = listEdt.getNmEditora();
                 rowData[2] = listEdt.getEndereco();

@@ -91,6 +91,11 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
                 c.setCnpj(rs.getString("cnpj"));
                 c.setEndereco(rs.getString("endereco"));
                 c.setTelefone(rs.getString("telefone"));
+                
+                if((c.getCnpj().equals(doc)) || (c.getCpf().equals(doc)))
+                {
+                    c = null;
+                }
             }
         } catch (SQLException e) {
             throw new SQLException("Cliente não existe.\n" + e.getMessage());
