@@ -10,6 +10,7 @@ import Services.ServicesFactory;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.Editora;
 import static tlivrariaoojf.TLivrariaOOJF.cadEditoras;
@@ -18,27 +19,30 @@ import static tlivrariaoojf.TLivrariaOOJF.cadEditoras;
  *
  * @author jairb
  */
-public class jfEditora extends javax.swing.JFrame {
+public class jfEditora extends javax.swing.JFrame
+{
 
     /**
      * Creates new form jfEditora
      */
-    public jfEditora() {
+    public jfEditora()
+    {
         initComponents();
         addRowToTable();
     }
 
-    public void addRowToTable() {
+    public void addRowToTable()
+    {
         try
         {
             EditoraServices editoraServices = ServicesFactory.getEditoraServices();
-            
+
             DefaultTableModel model = (DefaultTableModel) jtEditora.getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             Object rowData[] = new Object[5];//define vetor das colunas
-            
-            for (Editora listEdt : editoraServices.getAll()) 
+
+            for (Editora listEdt : editoraServices.getAll())
             {
                 rowData[0] = listEdt.getIdEditora();
                 rowData[1] = listEdt.getNmEditora();
@@ -206,25 +210,41 @@ public class jfEditora extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        try
+
+        if (jtfNomeEditora.getText().equals(""))
         {
-            // TODO add your handling code here:
-            Editora edt = new Editora();
-            edt.setNmEditora(jtfNomeEditora.getText());
-            edt.setEndereco(jtfEndereco.getText());
-            edt.setGerente(jtfGerente.getText());
-            edt.setTelefone(jtfTelefone.getText());
-            edt.setIdEditora(cadEditoras.addIdEdt());
-            
-            EditoraServices editoraServices = ServicesFactory.getEditoraServices();
-            editoraServices.addEditora(edt);
-            //cadEditoras.addEditora(edt);
-            addRowToTable();
-            jbLimpar.doClick();
-            jtfNomeEditora.requestFocus();
-        } catch (SQLException ex)
+            JOptionPane.showMessageDialog(this, "Preencha o Nome da Editora.");
+        } else if (jtfEndereco.getText().equals(""))
         {
-            Logger.getLogger(jfEditora.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Preencha o Endereço da Editora.");
+        } else if (jtfTelefone.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Telefone da Editora.");
+        } else if (jtfGerente.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Gerente da Editora.");
+        } else
+        {
+            try
+            {
+                // TODO add your handling code here:
+                Editora edt = new Editora();
+                edt.setNmEditora(jtfNomeEditora.getText());
+                edt.setEndereco(jtfEndereco.getText());
+                edt.setGerente(jtfGerente.getText());
+                edt.setTelefone(jtfTelefone.getText());
+                edt.setIdEditora(cadEditoras.addIdEdt());
+
+                EditoraServices editoraServices = ServicesFactory.getEditoraServices();
+                editoraServices.addEditora(edt);
+                //cadEditoras.addEditora(edt);
+                addRowToTable();
+                jbLimpar.doClick();
+                jtfNomeEditora.requestFocus();
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(jfEditora.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 
@@ -244,33 +264,43 @@ public class jfEditora extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(jfEditora.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new jfEditora().setVisible(true);
             }
         });

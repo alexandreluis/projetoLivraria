@@ -22,27 +22,33 @@ import static tlivrariaoojf.TLivrariaOOJF.cadLivros;
  *
  * @author jairb
  */
-public class jfLivro extends javax.swing.JFrame {
+public class jfLivro extends javax.swing.JFrame
+{
 
     /**
      * Creates new form jfLivro
      */
-    public jfLivro() {
+    public jfLivro()
+    {
         initComponents();
         addRowToTable();
         //this.addEditoraJCB();
         preencheComEditoras();
     }
 
-    public void addEditoraJCB() {
+    public void addEditoraJCB()
+    {
         jcbEditora.addItem("Selecione");
-        cadEditoras.getEditora().forEach(listEdt -> {
+        cadEditoras.getEditora().forEach(listEdt ->
+        {
             jcbEditora.addItem(listEdt.getNmEditora());
         });
     }
 
-    public void addRowToTable() {
-        try {
+    public void addRowToTable()
+    {
+        try
+        {
             LivroServices livroServices = ServicesFactory.getLivroServices();
             EditoraServices editoraServices = ServicesFactory.getEditoraServices();
 
@@ -50,7 +56,8 @@ public class jfLivro extends javax.swing.JFrame {
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             Object rowData[] = new Object[8];
-            for (Livro listLiv : livroServices.getAll()) {
+            for (Livro listLiv : livroServices.getAll())
+            {
                 rowData[0] = listLiv.getIdLivro();
                 rowData[1] = listLiv.getTitulo();
                 rowData[2] = listLiv.getAssunto();
@@ -62,7 +69,8 @@ public class jfLivro extends javax.swing.JFrame {
                 rowData[7] = listLiv.getIdEditora(); //(editoraServices.getById(listLiv.getIdEditora())).getIdEditora();
                 model.addRow(rowData);
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -283,87 +291,126 @@ public class jfLivro extends javax.swing.JFrame {
     }//GEN-LAST:event_jbCancelarActionPerformed
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
-        // TODO add your handling code here:
-        LivroServices livroServices = ServicesFactory.getLivroServices();
-        Livro liv = new Livro();
-        
-        if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
-        } else {
-            try 
+        if (jtfTitulo.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Titulo do Livro.");
+        } else if (jtfAssunto.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Assunto do Livro.");
+        } else if (jtfAutor.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Autor do Livro.");
+        } else if (jtfISBN.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o ISBN do Livro.");
+
+        } else if (jtfEstoque.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Estoque do Livro.");
+        } else if (jtfPreco.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Preço do Livro.");
+        } else
+        {
+            LivroServices livroServices = ServicesFactory.getLivroServices();
+            Livro liv = new Livro();
+
+            if (jtfTitulo.getText().isEmpty() && jtfAutor.getText().isEmpty())
             {
-                liv.setTitulo(jtfTitulo.getText());
-                liv.setAssunto(jtfAssunto.getText());
-                liv.setAutor(jtfAutor.getText());
-                liv.setIsbn(jtfISBN.getText());
-                liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
-                liv.setPreco(Float.parseFloat(jtfPreco.getText()));
-                
-                String[] parteId = jcbEditora.getSelectedItem().toString().split(":");
-                int idDaEditora = Integer.parseInt(parteId[0]);
-                
-                liv.setIdEditora(idDaEditora);
-                livroServices.addLivro(liv);
-                jbLimpar.doClick();
-                this.addRowToTable();
-                JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
-            } catch (SQLException ex) {
-                Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Preencher Titulo e Autor!");
+            } else
+            {
+                try
+                {
+                    liv.setTitulo(jtfTitulo.getText());
+                    liv.setAssunto(jtfAssunto.getText());
+                    liv.setAutor(jtfAutor.getText());
+                    liv.setIsbn(jtfISBN.getText());
+                    liv.setEstoque(Integer.parseInt(jtfEstoque.getText()));
+                    liv.setPreco(Float.parseFloat(jtfPreco.getText()));
+
+                    String[] parteId = jcbEditora.getSelectedItem().toString().split(":");
+                    int idDaEditora = Integer.parseInt(parteId[0]);
+
+                    liv.setIdEditora(idDaEditora);
+                    livroServices.addLivro(liv);
+                    jbLimpar.doClick();
+                    this.addRowToTable();
+                    JOptionPane.showMessageDialog(this, "Livro " + liv.getTitulo() + " cadastrado com sucesso!");
+                } catch (SQLException ex)
+                {
+                    Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
+
     }//GEN-LAST:event_jbSalvarActionPerformed
 
     private void jbLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbLimparActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbLimparActionPerformed
 
-    private void preencheComEditoras() {
-        try {
+    private void preencheComEditoras()
+    {
+        try
+        {
             EditoraServices editoraServices = ServicesFactory.getEditoraServices();
 
-            for (Editora item : editoraServices.getAll()) {
+            for (Editora item : editoraServices.getAll())
+            {
                 jcbEditora.addItem("" + item.getIdEditora() + ": " + item.getNmEditora());
             }
-        } catch (SQLException ex) {
+        } catch (SQLException ex)
+        {
             Logger.getLogger(jfLivro.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void jcbEditoraActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jcbEditoraActionPerformed
     {//GEN-HEADEREND:event_jcbEditoraActionPerformed
-        
+
     }//GEN-LAST:event_jcbEditoraActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+    public static void main(String args[])
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
+            {
+                if ("Nimbus".equals(info.getName()))
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
+        } catch (ClassNotFoundException ex)
+        {
             java.util.logging.Logger.getLogger(jfLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
+        } catch (InstantiationException ex)
+        {
             java.util.logging.Logger.getLogger(jfLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
+        } catch (IllegalAccessException ex)
+        {
             java.util.logging.Logger.getLogger(jfLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (javax.swing.UnsupportedLookAndFeelException ex)
+        {
             java.util.logging.Logger.getLogger(jfLivro.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            public void run()
+            {
                 new jfLivro().setVisible(true);
             }
         });

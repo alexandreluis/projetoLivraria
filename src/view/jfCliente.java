@@ -251,66 +251,81 @@ public class jfCliente extends javax.swing.JFrame
 
     private void jbSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbSalvarActionPerformed
 
-        try
+        if(jtfNomeCliente.getText().equals(""))
         {
-            ClienteServices clienteServices = ServicesFactory.getClienteServices();
-            
-            Cliente cli = new Cliente();
-            cli.setNomeCliente(jtfNomeCliente.getText());
-            cli.setTelefone(jtfTelefone.getText());
-            cli.setEndereco(jtfEndereco.getText());
-            boolean doc = false;
-            int tPessoa = 0;
-            
-            
-            if (jrbCpf.isSelected() && !jrbCnpj.isSelected())
-            {
-                tPessoa = 1;
-            } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected())
-            {
-                tPessoa = 2;
-            } else
-            {
-                JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
-            }
-            
-            Cliente cliCpfCnpj;
-            cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
-                       
-            if ((jrbCpf.isSelected()) && (cliCpfCnpj.getCpf() == null))
-            {
-                cli.setCpf(jtfCpfCnpj.getText());
-                cli.setCnpj(null);
-                doc = false;
-            } else if ((jrbCnpj.isSelected()) && (cliCpfCnpj.getCnpj() == null))
-            {
-                cli.setCpf(null);
-                cli.setCnpj(jtfCpfCnpj.getText());
-                doc = false;
-            }
-            
-            //Integer nCPFCNJ = cliCpfCnpj.getIdCliente(); 
-            if ((cliCpfCnpj == null) == true)
-            {
-                JOptionPane.showMessageDialog(this, "Este documento já existe!"
-                        + "\nTente novamente!!!");
-                doc = true;
-            }
-            
-            //Cadastro a partir das validações
-            if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty())
-            {
-                clienteServices.addCliente(cli);
-                addRowToTable();
-                jbLimpar.doClick();
-                JOptionPane.showMessageDialog(this, cli.getNomeCliente() + " cadastrado com sucesso!");
-            } else
-            {
-                JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
-            }
-        } catch (SQLException ex)
+            JOptionPane.showMessageDialog(this, "Preencha o Nome do cliente.");
+        }else if(jtfCpfCnpj.getText().equals(""))
         {
-            Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Preencha o Documento do cliente.");
+        }else if(jtfTelefone.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Telefone do cliente.");
+        }else if(jtfEndereco.getText().equals(""))
+        {
+            JOptionPane.showMessageDialog(this, "Preencha o Endereço do cliente.");
+        }else
+        {
+            try
+            {
+
+                ClienteServices clienteServices = ServicesFactory.getClienteServices();
+
+                Cliente cli = new Cliente();
+                cli.setNomeCliente(jtfNomeCliente.getText());
+                cli.setTelefone(jtfTelefone.getText());
+                cli.setEndereco(jtfEndereco.getText());
+                boolean doc = false;
+                int tPessoa = 0;
+
+                if (jrbCpf.isSelected() && !jrbCnpj.isSelected())
+                {
+                    tPessoa = 1;
+                } else if (!jrbCpf.isSelected() && jrbCnpj.isSelected())
+                {
+                    tPessoa = 2;
+                } else
+                {
+                    JOptionPane.showMessageDialog(this, "Selecione tipo de cliente.");
+                }
+
+                Cliente cliCpfCnpj;
+                cliCpfCnpj = clienteServices.getByDoc(jtfCpfCnpj.getText());
+
+                if ((jrbCpf.isSelected()) && (cliCpfCnpj.getCpf() == null))
+                {
+                    cli.setCpf(jtfCpfCnpj.getText());
+                    cli.setCnpj(null);
+                    doc = false;
+                } else if ((jrbCnpj.isSelected()) && (cliCpfCnpj.getCnpj() == null))
+                {
+                    cli.setCpf(null);
+                    cli.setCnpj(jtfCpfCnpj.getText());
+                    doc = false;
+                }
+
+                //Integer nCPFCNJ = cliCpfCnpj.getIdCliente(); 
+                if ((cliCpfCnpj == null) == true)
+                {
+                    JOptionPane.showMessageDialog(this, "Este documento já existe!"
+                            + "\nTente novamente!!!");
+                    doc = true;
+                }
+
+                //Cadastro a partir das validações
+                if ((jrbCpf.isSelected() || jrbCnpj.isSelected()) && !doc && !jtfNomeCliente.getText().isEmpty() && !jtfCpfCnpj.getText().isEmpty())
+                {
+                    clienteServices.addCliente(cli);
+                    addRowToTable();
+                    jbLimpar.doClick();
+                    JOptionPane.showMessageDialog(this, cli.getNomeCliente() + " cadastrado com sucesso!");
+                } else
+                {
+                    JOptionPane.showMessageDialog(this, "Cadastro incompleto.");
+                }
+            } catch (SQLException ex)
+            {
+                Logger.getLogger(jfCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }            
         }
     }//GEN-LAST:event_jbSalvarActionPerformed
 

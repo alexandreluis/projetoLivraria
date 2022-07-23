@@ -411,15 +411,23 @@ public class jfCompraVenda extends javax.swing.JFrame
     }//GEN-LAST:event_jtfDocClienteActionPerformed
 
     private void jbClienteOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClienteOkActionPerformed
+
         try
         {
-            ClienteServices clienteServices = ServicesFactory.getClienteServices();
-            Cliente client = clienteServices.getByDoc(jtfDocCliente.getText());
-
-            if (!client.getNomeCliente().equals(""))
+            if (!jtfDocCliente.getText().equals(""))
             {
-                jlCliente.setText("Cliente Ok");
+                ClienteServices clienteServices = ServicesFactory.getClienteServices();
+                Cliente client = clienteServices.getByDoc(jtfDocCliente.getText());
+
+                if (!client.getNomeCliente().equals(""))
+                {
+                    jlCliente.setText("Cliente Ok");
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Insira o Documento do cliente.");
             }
+
         } catch (SQLException ex)
         {
             Logger.getLogger(jfCompraVenda.class.getName()).log(Level.SEVERE, null, ex);
@@ -430,18 +438,24 @@ public class jfCompraVenda extends javax.swing.JFrame
 
         LocalDate today = LocalDate.now();
         String data = today.toString();
-        
+
         try
         {
-            LivroServices livroServices = ServicesFactory.getLivroServices();
-            Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
-
-            if (!livro.getTitulo().equals(""))
+            if (!jtfDocLivro.getText().equals(""))
             {
-                jlLivro.setText("Livro Ok");
-                jlValorUnidade.setText("" + livro.getPreco());
-                jtfQuantidade.setText("" + livro.getEstoque());
-                jlData.setText(today.toString());
+                LivroServices livroServices = ServicesFactory.getLivroServices();
+                Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
+
+                if (!livro.getTitulo().equals(""))
+                {
+                    jlLivro.setText("Livro Ok");
+                    jlValorUnidade.setText("" + livro.getPreco());
+                    jtfQuantidade.setText("" + livro.getEstoque());
+                    jlData.setText(today.toString());
+                }
+            } else
+            {
+                JOptionPane.showMessageDialog(this, "Insira o Documento do livro.");
             }
         } catch (SQLException ex)
         {
@@ -451,11 +465,18 @@ public class jfCompraVenda extends javax.swing.JFrame
 
     private void jbCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCalcularActionPerformed
         // TODO add your handling code here:
-        Double valor = Double.parseDouble(jlValorUnidade.getText());
-        Integer quantidade = Integer.parseInt(jtfQuantidade.getText());
-        Double valorFinal = valor * quantidade;
 
-        jtfSubTotal.setText("" + valorFinal);
+        if (!jtfQuantidade.getText().equals(""))
+        {
+            Double valor = Double.parseDouble(jlValorUnidade.getText());
+            Integer quantidade = Integer.parseInt(jtfQuantidade.getText());
+            Double valorFinal = valor * quantidade;
+
+            jtfSubTotal.setText("" + valorFinal);
+        } else
+        {
+            JOptionPane.showMessageDialog(this, "Insira quantidade.");
+        }
     }//GEN-LAST:event_jbCalcularActionPerformed
 
     /**
