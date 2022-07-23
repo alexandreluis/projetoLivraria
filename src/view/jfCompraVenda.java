@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package view;
 
 import Services.ClienteServices;
@@ -11,8 +7,10 @@ import Services.VendaLivroServices;
 import java.security.Timestamp;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -20,6 +18,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Cliente;
 import model.Livro;
 import model.VendaLivro;
@@ -31,12 +30,15 @@ import model.VendaLivro;
 public class jfCompraVenda extends javax.swing.JFrame
 {
 
+    private Double valorFinal = 0.0;
+
     /**
      * Creates new form jfCompraVenda
      */
     public jfCompraVenda()
     {
         initComponents();
+        addRowToTable();
     }
 
     /**
@@ -46,7 +48,8 @@ public class jfCompraVenda extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -63,16 +66,24 @@ public class jfCompraVenda extends javax.swing.JFrame
         jButton1 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
+        jlData = new javax.swing.JLabel();
         jlCliente = new javax.swing.JLabel();
         jlLivro = new javax.swing.JLabel();
+        jbClienteOk = new javax.swing.JButton();
+        jbIsbnOk = new javax.swing.JButton();
+        jbCalcular = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jtListaCompraVenda = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("CPF/CNPJ");
 
-        jtfDocCliente.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jtfDocCliente.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jtfDocClienteActionPerformed(evt);
             }
         });
@@ -90,8 +101,10 @@ public class jfCompraVenda extends javax.swing.JFrame
         jlValorUnidade.setText(" ");
 
         jButton1.setText("Comprar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton1ActionPerformed(evt);
             }
         });
@@ -100,11 +113,38 @@ public class jfCompraVenda extends javax.swing.JFrame
 
         jLabel5.setText("Data");
 
-        jLabel10.setText(" ");
+        jlData.setText(" ");
 
         jlCliente.setText("ClienteOK?");
 
         jlLivro.setText("LivroOK?");
+
+        jbClienteOk.setText("Ok?");
+        jbClienteOk.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jbClienteOkActionPerformed(evt);
+            }
+        });
+
+        jbIsbnOk.setText("Ok?");
+        jbIsbnOk.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jbIsbnOkActionPerformed(evt);
+            }
+        });
+
+        jbCalcular.setText("Calular");
+        jbCalcular.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jbCalcularActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -128,8 +168,12 @@ public class jfCompraVenda extends javax.swing.JFrame
                             .addComponent(jtfDocLivro, javax.swing.GroupLayout.DEFAULT_SIZE, 131, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jlLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jlCliente, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE))
+                            .addComponent(jlCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jlLivro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jbClienteOk)
+                            .addComponent(jbIsbnOk))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -145,11 +189,17 @@ public class jfCompraVenda extends javax.swing.JFrame
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jtfSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(2, 2, 2)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 268, Short.MAX_VALUE)
+                                .addComponent(jLabel5)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlData, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(2, 2, 2))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(36, 36, 36)
+                                .addComponent(jbCalcular)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -160,13 +210,15 @@ public class jfCompraVenda extends javax.swing.JFrame
                     .addComponent(jLabel1)
                     .addComponent(jtfDocCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9)
-                    .addComponent(jlCliente))
+                    .addComponent(jlCliente)
+                    .addComponent(jbClienteOk))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jtfDocLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jlLivro))
+                    .addComponent(jlLivro)
+                    .addComponent(jbIsbnOk))
                 .addGap(52, 52, 52)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
@@ -176,14 +228,67 @@ public class jfCompraVenda extends javax.swing.JFrame
                     .addComponent(jLabel4)
                     .addComponent(jtfQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jLabel10))
+                    .addComponent(jlData))
                 .addGap(27, 27, 27)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
-                    .addComponent(jtfSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jtfSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jbCalcular))
                 .addGap(18, 18, 18)
                 .addComponent(jButton1)
                 .addContainerGap(49, Short.MAX_VALUE))
+        );
+
+        jtListaCompraVenda.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
+            },
+            new String []
+            {
+                "idVendaLivro", "idCliente", "idLivro", "Qtd", "SubTotal", "Data"
+            }
+        )
+        {
+            Class[] types = new Class []
+            {
+                java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.Double.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean []
+            {
+                false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex)
+            {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex)
+            {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jtListaCompraVenda);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -191,15 +296,18 @@ public class jfCompraVenda extends javax.swing.JFrame
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 16, Short.MAX_VALUE))
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -209,12 +317,8 @@ public class jfCompraVenda extends javax.swing.JFrame
 
         ClienteServices clienteServices = ServicesFactory.getClienteServices();
         LivroServices livroServices = ServicesFactory.getLivroServices();
-        
-        
-        Date in = new Date();
-        LocalDateTime ldt = LocalDateTime.ofInstant(in.toInstant(), ZoneId.systemDefault());
-        Date outDate = Date.from(ldt.atZone(ZoneId.systemDefault()).toInstant());
 
+        
         if (jtfDocCliente.getText().equals(""))
         {
             JOptionPane.showInputDialog(null, "Preencha o CPF/CNPJ");
@@ -232,37 +336,114 @@ public class jfCompraVenda extends javax.swing.JFrame
 
         try
         {
-            Cliente cliente = clienteServices.getByDoc(jtfDocLivro.getText());
-            if(!cliente.getNomeCliente().equals(""))
-            {
-                jlCliente.setText("OK!");
-            }
-
+            Cliente cliente = clienteServices.getByDoc(jtfDocCliente.getText());
             Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
-            if(!livro.getAutor().equals(""))
-            {
-                jlLivro.setText("OK!!");
-            }
-            
-            String jtfSubTotalDaCompra = jtfSubTotal.getText();
-            
+
+            System.out.println(":" + livro.getEstoque());
+            jlValorUnidade.setText("" + livro.getPreco());
+            jlData.setText("2022-12-01");
+
             VendaLivro vendaLivro = new VendaLivro();
             vendaLivro.setIdCliente(cliente.getIdCliente());
             vendaLivro.setIdLivro(livro.getIdLivro());
-            vendaLivro.setDataVenda(outDate);
             vendaLivro.setQtd(Integer.parseInt(jtfQuantidade.getText()));
+            vendaLivro.setSubTotal(Double.parseDouble(jtfSubTotal.getText()));
+
+            DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            Date myDate = formatter.parse("2022-12-01");
+            java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
+            vendaLivro.setDataVenda(sqlDate);
 
             VendaLivroServices vendaLivroServices = ServicesFactory.getVendaLivroServices();
             vendaLivroServices.addVendaLivro(vendaLivro);
+
+            addRowToTable();
+        } catch (ParseException ex)
+        {
+            ex.printStackTrace();
+            System.out.println("ex" + ex);
         } catch (SQLException ex)
         {
-            JOptionPane.showMessageDialog(null, "Erro");
+            ex.printStackTrace();
+            System.out.println("" + ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    public void addRowToTable()
+    {
+        try
+        {
+            VendaLivroServices vendaLivroServices = ServicesFactory.getVendaLivroServices();
+
+            DefaultTableModel model = (DefaultTableModel) jtListaCompraVenda.getModel();
+            model.getDataVector().removeAllElements();
+            model.fireTableDataChanged();
+            Object rowData[] = new Object[6];
+            System.out.println("row " +  rowData[4]);
+            
+            for (VendaLivro itemVendaLivro : vendaLivroServices.getAll())
+            {
+                rowData[0] = itemVendaLivro.getIdVendaLivro();
+                rowData[1] = itemVendaLivro.getIdCliente();
+                rowData[2] = itemVendaLivro.getIdLivro();
+                rowData[3] = itemVendaLivro.getQtd();
+                rowData[4] = itemVendaLivro.getSubTotal();
+                rowData[5] = itemVendaLivro.getDataVenda();
+                model.addRow(rowData);
+            }
+        } catch (SQLException ex)
+        {
+            JOptionPane.showInputDialog("Clientes não existem.");
+        }
+    }
     private void jtfDocClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfDocClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfDocClienteActionPerformed
+
+    private void jbClienteOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbClienteOkActionPerformed
+        try
+        {
+            ClienteServices clienteServices = ServicesFactory.getClienteServices();
+            Cliente client = clienteServices.getByDoc(jtfDocCliente.getText());
+
+            if (!client.getNomeCliente().equals(""))
+            {
+                jlCliente.setText("Cliente Ok");
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfCompraVenda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbClienteOkActionPerformed
+
+    private void jbIsbnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIsbnOkActionPerformed
+
+        try
+        {
+            LivroServices livroServices = ServicesFactory.getLivroServices();
+            Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
+
+            if (!livro.getTitulo().equals(""))
+            {
+                jlLivro.setText("Livro Ok");
+                jlValorUnidade.setText("" + livro.getPreco());
+                jtfQuantidade.setText("" + livro.getEstoque());
+                jlData.setText("12/01/2022");
+            }
+        } catch (SQLException ex)
+        {
+            Logger.getLogger(jfCompraVenda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jbIsbnOkActionPerformed
+
+    private void jbCalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbCalcularActionPerformed
+        // TODO add your handling code here:
+        Double valor = Double.parseDouble(jlValorUnidade.getText());
+        Integer quantidade = Integer.parseInt(jtfQuantidade.getText());
+        Double valorFinal = valor * quantidade;
+
+        jtfSubTotal.setText("" + valorFinal);
+    }//GEN-LAST:event_jbCalcularActionPerformed
 
     /**
      * @param args the command line arguments
@@ -312,7 +493,6 @@ public class jfCompraVenda extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -321,9 +501,16 @@ public class jfCompraVenda extends javax.swing.JFrame
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton jbCalcular;
+    private javax.swing.JButton jbClienteOk;
+    private javax.swing.JButton jbIsbnOk;
     private javax.swing.JLabel jlCliente;
+    private javax.swing.JLabel jlData;
     private javax.swing.JLabel jlLivro;
     private javax.swing.JLabel jlValorUnidade;
+    private javax.swing.JTable jtListaCompraVenda;
     private javax.swing.JTextField jtfDocCliente;
     private javax.swing.JTextField jtfDocLivro;
     private javax.swing.JTextField jtfQuantidade;

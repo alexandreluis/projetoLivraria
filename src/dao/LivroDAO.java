@@ -29,8 +29,6 @@ public class LivroDAO implements InterfaceDAO<Livro> {
                     + pVO.getEstoque() + ", "
                     + pVO.getPreco() + ", "
                     + pVO.getIdEditora() + ");";
-            System.out.println("::::"  + pVO.getIdEditora());
-            System.out.println(" sql " + sql);
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir o livro.\n" + e.getMessage());
@@ -82,19 +80,20 @@ public class LivroDAO implements InterfaceDAO<Livro> {
 
         try {
             String sql;
-            sql = "SELECT * FROM livro WHERE idLivro = " + doc;
+            sql = "SELECT * FROM livro WHERE isbn = " + doc + ";";
 
             ResultSet rs = statement.executeQuery(sql);
 
             if (rs.next()) {
+                System.out.println("");    
                 livro.setIdLivro(rs.getInt("idLivro"));
-                livro.setTitulo(rs.getString("tituloLivro"));
-                livro.setAutor(rs.getString("autorLivro"));
-                livro.setAssunto(rs.getString("assuntoLivro"));
-                livro.setIsbn(rs.getString("isbnLivro"));
-                livro.setEstoque(rs.getInt("estoqueLivro"));
-                livro.setPreco(rs.getFloat("precoLivro"));
-                livro.setIdLivro(rs.getInt("idLivro"));
+                livro.setTitulo(rs.getString("titulo"));
+                livro.setAutor(rs.getString("autor"));
+                livro.setAssunto(rs.getString("assunto"));
+                livro.setIsbn(rs.getString("isbn"));
+                livro.setEstoque(rs.getInt("estoque"));
+                livro.setPreco(rs.getFloat("preco"));
+                livro.setIdEditora(rs.getInt("idEditora"));
             }
         } catch (SQLException e) {
             throw new SQLException("Livro não encontrado.\n" + e.getMessage());

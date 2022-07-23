@@ -13,14 +13,14 @@ public class VendaLivro {
     private int idCliente;
     private int idLivro;
     private int qtd;
-    private float subTotal;
+    private Double subTotal;
     private Date dataVenda;
 
     
     public VendaLivro() {
     }
 
-    public VendaLivro(int idVendaLivro, int idCliente, int idLivro, int qtd, float subTotal, Date dataVenda) {
+    public VendaLivro(int idVendaLivro, int idCliente, int idLivro, int qtd, Double subTotal, Date dataVenda) {
         this.idVendaLivro = idVendaLivro;
         this.idCliente = idCliente;
         this.idLivro = idLivro;
@@ -62,11 +62,11 @@ public class VendaLivro {
         this.qtd = qtd;
     }
 
-    public float getSubTotal() {
+    public Double getSubTotal() {
         return subTotal;
     }
 
-    public void setSubTotal(float subTotal) {
+    public void setSubTotal(Double subTotal) {
         this.subTotal = subTotal;
     }
 

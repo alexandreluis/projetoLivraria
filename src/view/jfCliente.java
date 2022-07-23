@@ -230,7 +230,7 @@ public class jfCliente extends javax.swing.JFrame
             DefaultTableModel model = (DefaultTableModel) jtClientes.getModel();
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
-            Object rowData[] = new Object[6];//define vetor das colunas
+            Object rowData[] = new Object[6];
 
             for (Cliente listCli : clienteServices.getAll())
             {

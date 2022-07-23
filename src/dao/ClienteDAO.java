@@ -12,8 +12,8 @@ import model.Cliente;
  *
  * @author 180900411
  */
-public class ClienteDAO implements InterfaceDAO<Cliente> 
-{
+public class ClienteDAO implements InterfaceDAO<Cliente> {
+
     @Override
     public void add(Cliente pVO) throws SQLException {
         Connection conn = Conexao.getConexao();
@@ -70,8 +70,7 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
     }
 
     @Override
-    public Cliente getByDoc(String doc) throws SQLException
-    {
+    public Cliente getByDoc(String doc) throws SQLException {
         Connection connection = Conexao.getConexao();
         Statement statement = connection.createStatement();
 
@@ -79,23 +78,22 @@ public class ClienteDAO implements InterfaceDAO<Cliente>
 
         try {
             String sql;
-            sql = "SELECT * FROM cliente WHERE idCliente = " + doc + ";";
+                       
+            if (doc.length() == 11) {
+                sql = "SELECT * FROM cliente WHERE cpf = " + doc + ";";
+            } else {
+                sql = "SELECT * FROM cliente WHERE cnpj = " + doc + ";";
+            }
 
             ResultSet rs = statement.executeQuery(sql);
 
-            while (rs.next()) 
-            {
+            while (rs.next()) {
                 c.setIdCliente(rs.getInt("idCliente"));
                 c.setNomeCliente(rs.getString("nomeCliente"));
                 c.setCpf(rs.getString("cpf"));
                 c.setCnpj(rs.getString("cnpj"));
                 c.setEndereco(rs.getString("endereco"));
                 c.setTelefone(rs.getString("telefone"));
-                
-                if((c.getCnpj().equals(doc)) || (c.getCpf().equals(doc)))
-                {
-                    c = null;
-                }
             }
         } catch (SQLException e) {
             throw new SQLException("Cliente não existe.\n" + e.getMessage());

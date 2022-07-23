@@ -24,9 +24,13 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro>
             sql = "INSERT INTO vendaLivro VALUES (null, "
                     + pVO.getIdCliente() + ", "
                     + pVO.getIdLivro() + ", "
-                    + pVO.getDataVenda() + ", "
-                    + pVO.getQtd() + ");";
+                    + pVO.getQtd() + ", "
+                    + pVO.getSubTotal() + ", '"
+                    + pVO.getDataVenda() + "');";
+            
+            
             System.out.println(":1 " + sql);
+            
             statement.execute(sql);
         } catch (SQLException e) {
             throw new SQLException("Erro ao inserir a venda do livro no sistema.\n" + e.getMessage());
@@ -54,7 +58,7 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro>
                 vendaLivro.setIdCliente(rs.getInt("idCliente"));
                 vendaLivro.setIdLivro(rs.getInt("idLivro"));
                 vendaLivro.setQtd(rs.getInt("quantidadeVendida"));
-                vendaLivro.setSubTotal(rs.getFloat("subTotal"));
+                vendaLivro.setSubTotal(rs.getDouble("subTotal"));
                 vendaLivro.setDataVenda(rs.getDate("dateVendaLivro"));
             }
         } catch (SQLException e) {
@@ -85,7 +89,7 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro>
                 vendaLivro.setIdCliente(rs.getInt("idCliente"));
                 vendaLivro.setIdLivro(rs.getInt("idLivro"));
                 vendaLivro.setQtd(rs.getInt("quantidadeVendida"));
-                vendaLivro.setSubTotal(rs.getFloat("subTotal"));
+                vendaLivro.setSubTotal(rs.getDouble("subTotal"));
                 vendaLivro.setDataVenda(rs.getDate("dateVendaLivro"));
             }
         } catch (SQLException e) {
@@ -105,26 +109,26 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro>
 
         try {
             String sql;
-            sql = "SELECT * FROM vendalivro";
+            sql = "SELECT * FROM vendaLivro";
 
             ResultSet rs = statement.executeQuery(sql);
 
-            ArrayList<VendaLivro> listaDeVendaLivro = new ArrayList<>();
+            ArrayList<VendaLivro> listaVendaLivro = new ArrayList<>();
 
             while (rs.next()) {
                 VendaLivro vendaLivro = new VendaLivro();
-
+                
                 vendaLivro.setIdVendaLivro(rs.getInt("idVendaLivro"));
                 vendaLivro.setIdCliente(rs.getInt("idCliente"));
                 vendaLivro.setIdLivro(rs.getInt("idLivro"));
-                vendaLivro.setQtd(rs.getInt("quantidadeVendida"));
-                vendaLivro.setSubTotal(rs.getFloat("subTotal"));
-                vendaLivro.setDataVenda(rs.getDate("dateVendaLivro"));
+                vendaLivro.setQtd(rs.getInt("qtd"));
+                vendaLivro.setSubTotal(rs.getDouble("subTotal"));
+                vendaLivro.setDataVenda(rs.getDate("dataCompra"));
 
-                listaDeVendaLivro.add(vendaLivro);
+                listaVendaLivro.add(vendaLivro);
             }
-
-            return listaDeVendaLivro;
+            System.out.println("get all ");
+            return listaVendaLivro;
         } catch (SQLException e) {
             throw new SQLException("Venda do livro não encontrada.\n" + e.getMessage());
         } finally {

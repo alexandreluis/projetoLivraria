@@ -59,15 +59,15 @@ CREATE TABLE `livro` (
 --
 
 CREATE TABLE `vendaLivro` (
-  `idCliente` int(11) NOT NULL auto_increment primary key,
-  `idLivro` int(11) NOT NULL,
-  `qtd` int(11) NOT NULL,
-  `subTotal` decimal(10,2) NOT NULL,
-  `dataCompra` date NOT NULL,
+`idVendaLivro` int(11) NOT NULL auto_increment primary key,
+`idCliente` int(11) NOT NULL,
+`idLivro` int(11) NOT NULL,
+`qtd` int(11) NOT NULL,
+`subTotal` decimal(10,2) NOT NULL,
+`dataCompra` date NOT NULL,
 foreign key (idCliente) references cliente(idCliente),
 foreign key (idLivro) references livro(idLivro)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 
