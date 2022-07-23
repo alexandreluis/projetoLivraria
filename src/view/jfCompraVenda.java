@@ -4,16 +4,11 @@ import Services.ClienteServices;
 import Services.LivroServices;
 import Services.ServicesFactory;
 import Services.VendaLivroServices;
-import java.security.Timestamp;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +67,7 @@ public class jfCompraVenda extends javax.swing.JFrame
         jbClienteOk = new javax.swing.JButton();
         jbIsbnOk = new javax.swing.JButton();
         jbCalcular = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jtListaCompraVenda = new javax.swing.JTable();
@@ -146,6 +142,8 @@ public class jfCompraVenda extends javax.swing.JFrame
             }
         });
 
+        jLabel8.setText("Venda de Livro");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -201,11 +199,16 @@ public class jfCompraVenda extends javax.swing.JFrame
                                 .addComponent(jbCalcular)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addComponent(jLabel8)
+                .addGap(7, 7, 7)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jtfDocCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -318,7 +321,9 @@ public class jfCompraVenda extends javax.swing.JFrame
         ClienteServices clienteServices = ServicesFactory.getClienteServices();
         LivroServices livroServices = ServicesFactory.getLivroServices();
 
-        
+        LocalDate today = LocalDate.now();
+        String data = today.toString();
+
         if (jtfDocCliente.getText().equals(""))
         {
             JOptionPane.showInputDialog(null, "Preencha o CPF/CNPJ");
@@ -339,9 +344,8 @@ public class jfCompraVenda extends javax.swing.JFrame
             Cliente cliente = clienteServices.getByDoc(jtfDocCliente.getText());
             Livro livro = livroServices.getByDoc(jtfDocLivro.getText());
 
-            System.out.println(":" + livro.getEstoque());
             jlValorUnidade.setText("" + livro.getPreco());
-            jlData.setText("2022-12-01");
+            jlData.setText(today.toString());
 
             VendaLivro vendaLivro = new VendaLivro();
             vendaLivro.setIdCliente(cliente.getIdCliente());
@@ -350,7 +354,8 @@ public class jfCompraVenda extends javax.swing.JFrame
             vendaLivro.setSubTotal(Double.parseDouble(jtfSubTotal.getText()));
 
             DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            Date myDate = formatter.parse("2022-12-01");
+
+            Date myDate = formatter.parse(data);
             java.sql.Date sqlDate = new java.sql.Date(myDate.getTime());
             vendaLivro.setDataVenda(sqlDate);
 
@@ -358,6 +363,12 @@ public class jfCompraVenda extends javax.swing.JFrame
             vendaLivroServices.addVendaLivro(vendaLivro);
 
             addRowToTable();
+
+            //
+            Integer quantidade = Integer.parseInt(jtfQuantidade.getText());
+            livro.setEstoque(livro.getEstoque() - quantidade);
+            livroServices.updateFieldsOfCliente(livro);
+
         } catch (ParseException ex)
         {
             ex.printStackTrace();
@@ -379,8 +390,7 @@ public class jfCompraVenda extends javax.swing.JFrame
             model.getDataVector().removeAllElements();
             model.fireTableDataChanged();
             Object rowData[] = new Object[6];
-            System.out.println("row " +  rowData[4]);
-            
+
             for (VendaLivro itemVendaLivro : vendaLivroServices.getAll())
             {
                 rowData[0] = itemVendaLivro.getIdVendaLivro();
@@ -418,6 +428,9 @@ public class jfCompraVenda extends javax.swing.JFrame
 
     private void jbIsbnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbIsbnOkActionPerformed
 
+        LocalDate today = LocalDate.now();
+        String data = today.toString();
+        
         try
         {
             LivroServices livroServices = ServicesFactory.getLivroServices();
@@ -428,7 +441,7 @@ public class jfCompraVenda extends javax.swing.JFrame
                 jlLivro.setText("Livro Ok");
                 jlValorUnidade.setText("" + livro.getPreco());
                 jtfQuantidade.setText("" + livro.getEstoque());
-                jlData.setText("12/01/2022");
+                jlData.setText(today.toString());
             }
         } catch (SQLException ex)
         {
@@ -499,6 +512,7 @@ public class jfCompraVenda extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

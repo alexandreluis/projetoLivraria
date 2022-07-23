@@ -155,13 +155,13 @@ public class LivroDAO implements InterfaceDAO<Livro> {
         {
             String sql;
             sql = "UPDATE livro SET "
-                    + "tituloLivro = '" + pVO.getTitulo() + "', "
-                    + "autorLivro = '" + pVO.getAutor() + "', "
-                    + "assuntoLivro = '" + pVO.getAssunto() + "', "
-                    + "isbnLivro = '" + pVO.getIsbn() + "', "
-                    + "estoqueLivro = " + pVO.getEstoque() + ", "
-                    + "precoLivro = " + pVO.getPreco() + ", "
-                    + "idEditoraLivro = " + pVO.getIdEditora()+ " "
+                    + "titulo = '" + pVO.getTitulo() + "', "
+                    + "autor = '" + pVO.getAutor() + "', "
+                    + "assunto = '" + pVO.getAssunto() + "', "
+                    + "isbn = '" + pVO.getIsbn() + "', "
+                    + "estoque = " + pVO.getEstoque() + ", "
+                    + "preco = " + pVO.getPreco() + ", "
+                    + "idEditora = " + pVO.getIdEditora()+ " "
                     + "WHERE idLivro = " + pVO.getIdLivro();
             
             executou = statement.executeUpdate(sql);

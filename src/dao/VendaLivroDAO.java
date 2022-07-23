@@ -127,7 +127,7 @@ public class VendaLivroDAO implements InterfaceDAO<VendaLivro>
 
                 listaVendaLivro.add(vendaLivro);
             }
-            System.out.println("get all ");
+            
             return listaVendaLivro;
         } catch (SQLException e) {
             throw new SQLException("Venda do livro não encontrada.\n" + e.getMessage());
