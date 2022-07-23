@@ -71,15 +71,3 @@ foreign key (idLivro) references livro(idLivro)
 
 
 
-/*
- SELECT * FROM cliente LIMIT 100;
-INSERT INTO cliente VALUES (null, 'nome pachio', 'rua do goleiro', '5132658978', '97506761068', '');
-INSERT INTO cliente VALUES (null, 'jonatis', '9715482615', 'null', 'Rua yt', '5156895689');
-
-INSERT INTO livro VALUES (null, 'titulo 1', 'robert do 1', 'O livro 1', 124578, 100, 2.0, 0);
-
-INSERT INTO editora VALUES (null, 'Editoras1', 'end da edit 1', '513454578', 'gerente da 1');
-INSERT INTO editora VALUES (null, 'Editoras2', 'end da edit 2', '517854578', 'gerente da 2');
-INSERT INTO editora VALUES (null, 'Editoras3', 'end da edit 3', '5132654578', 'gerente da 3');
-
-*/
